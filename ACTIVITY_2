@@ -1,1 +1,0 @@
-SELECT CONCAT (fname, " ", lname) AS FullName FROM client INNER JOIN schedule ON client.client_id = schedule.client_id INNER JOIN trainor ON schedule.sched_id = trainor.sched_id;
