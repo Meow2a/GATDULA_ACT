@@ -1,0 +1,118 @@
+DROP DATABASE GymGatdula;
+CREATE DATABASE GymGatdula;
+USE GymGatdula;
+
+CREATE TABLE Client(
+	client_ID int NOT NULL AUTO_INCREMENT,
+	fname varchar(20),
+	lname varchar(20),
+	gender varchar(5),
+	age int,
+	contact_add varchar(50),
+	email varchar(50),
+	password varchar(20),
+	PRIMARY KEY (client_ID)
+);
+
+CREATE TABLE Membership(
+	mem_ID int NOT NULL AUTO_INCREMENT,
+	client_ID int,
+	status_mem varchar(20),
+	mem_date date,
+	PRIMARY KEY (mem_ID),
+	CONSTRAINT FK_clientCLid FOREIGN KEY (client_ID)
+	REFERENCES Client(client_ID)
+);
+
+CREATE TABLE Payment(
+	payment_ID int NOT NULL AUTO_INCREMENT,
+	client_ID int,
+	PDate date,
+	amout decimal,
+	PRIMARY KEY (payment_ID),
+	CONSTRAINT FK_payCLid FOREIGN KEY (client_ID)
+	REFERENCES Client(client_ID)
+);
+
+CREATE TABLE Transaction(
+	trans_ID int NOT NULL AUTO_INCREMENT,
+	client_ID int,
+	TDate date,
+	trans_name varchar(50),
+	amout decimal,
+	PRIMARY KEY (trans_ID),
+	CONSTRAINT FK_transCLid FOREIGN KEY (client_ID)
+	REFERENCES Client(client_ID)
+);
+
+CREATE TABLE Reports(
+	reports_ID int NOT NULL AUTO_INCREMENT,
+	client_ID int,
+	trans_ID int,
+	RDate date,
+	total_amount decimal,
+	PRIMARY KEY (reports_ID),
+	CONSTRAINT FK_repCLid FOREIGN KEY (client_ID)
+	REFERENCES Client(client_ID),
+	CONSTRAINT FK_repTransid FOREIGN KEY (trans_ID)
+	REFERENCES Transaction(trans_ID)
+);
+
+CREATE TABLE trainor(
+	trainor_ID int NOT NULL AUTO_INCREMENT,
+	name varchar(255),
+	salary decimal,
+	email varchar(50),
+	password varchar(20),
+	PRIMARY KEY (trainor_ID)
+);
+
+CREATE TABLE SSchedule(
+	sched_ID int NOT NULL AUTO_INCREMENT,
+	client_ID int,
+	trainor_ID int,
+	session varchar(50),
+	activity varchar(50),
+    SDate date,
+    time_start time,
+    time_end time,
+	PRIMARY KEY (Sched_ID),
+	CONSTRAINT FK_schedCLid FOREIGN KEY (client_ID)
+	REFERENCES Client(client_ID),
+    CONSTRAINT FK_schedtraid FOREIGN KEY (trainor_ID)
+	REFERENCES trainor(trainor_ID)
+);
+
+INSERT INTO trainor (name, salary, email, password)
+VALUE ('Gatdula', 20000, '122@mail.com', 5050),
+('Valencia', 11000, '111@mail.com', 6060);
+
+INSERT INTO Client (fname, lname, gender, age, contact_add, email, password) 
+VALUE ('Cathyrine', 'Gatdula', 'V', 23, 091234, '012@mail.com', 0123), 
+('Jacob', 'Gatdula', 'V', 22, 094567, '013@mail.com', 1234), 
+('Arjay', 'Gatdula', 'V', 20, 098910, '014@mail.com', 2345);
+
+INSERT INTO Membership (client_ID, status_mem, mem_date)
+VALUE ( 1, 'Active', '2022-06-01'),
+( 2, 'Active', '2022-06-02'),
+( 3, 'Active', '2022-06-03');
+
+INSERT INTO SSchedule (client_ID, trainor_ID, session, activity, SDate, time_start, time_end)
+VALUE (2, 1, '10', 'barbel', '2022-07-17', '13:20', '20:00'),
+(3, 2, '12', 'situp', '2022-07-18', '14:00', '22:00'),
+(1, 1, '11', 'pushup', '2022-07-19', '15:00', '22:00');
+
+INSERT INTO Payment (client_ID, PDate, amout)
+VALUE (1, '2022-10-01', 6000),
+(2, '2022-10-02', 5000),
+(3, '2022-10-03', 4000);
+
+INSERT INTO Transaction (client_ID, TDate, trans_name, amout)
+VALUE (1, '2022-05-01', 'membership', 4000),
+(2, '2022-05-02', 'membership', 7000),
+(3, '2022-05-03', 'membership', 6000);
+
+INSERT INTO Reports (client_ID, trans_ID, RDate, total_amount)
+VALUE (1, 1, '2022-09-17', 12000),
+(2, 2, '2022-09-18', 15000),
+(3, 3, '2022-09-19', 13000);
